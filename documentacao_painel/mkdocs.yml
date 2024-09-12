@@ -1,1 +1,51 @@
-site_name: My Docs
+repo_url: https://github.com/FGRUnB
+repo_name: Painel
+site_name: Documentação painel FGR
+
+site_name: FGR Painel
+nav: 
+  - Equipe: "index.md"
+  - Introdução: 
+    - Introdução: introducao.md
+
+extra_css:
+  - stylesheets/extra.css
+theme:
+  language: pt-BR
+  name: material
+  favicon:
+  logo:
+  features:
+    - navigation.tabs
+    - navigation.top
+  palette:
+    - scheme : default
+      primary: green
+      accent: custom
+      toggle:
+        icon: material/toggle-switch
+        name: Mudar para o modo escuro 
+
+    - scheme: slate
+      primary: amber
+      accent: custom
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Mudar para o modo claro
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+
+extra:
+  analytics:
+    provider: google
+    property: G-7QVWYC7EZJ 
