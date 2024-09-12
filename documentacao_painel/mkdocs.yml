@@ -13,6 +13,8 @@ extra_css:
 theme:
   language: pt-BR
   name: material
+  favicon: assets/Logo FGR VETOR SEPARADO_branco-cinza.png
+  logo: assets/Logo FGR VETOR SEPARADO_branco-cinza.png
   favicon:
   logo:
   features:
