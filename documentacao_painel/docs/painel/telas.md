@@ -14,7 +14,7 @@ O **Endurance** é um dos testes mais longos e exaustivos, focado na durabilidad
 **Por que é importante?**  
 Uma tela personalizada para o Endurance permite que a equipe monitore de perto o consumo energético e a durabilidade do sistema, prevenindo falhas e otimizando o equilíbrio entre desempenho e eficiência, aspectos cruciais para completar a prova sem esgotar a bateria.
 
-<img src='./assets/tela_enduro.png' alt="Texto Alternativo">
+<img src='../assets/tela_enduro.png' alt="Tela Enduro">
 </img>
 
 ---
@@ -29,6 +29,9 @@ No **Brake Test**, a eficiência e o balanceamento do sistema de frenagem são f
 **Por que é importante?**  
 Com uma tela focada no Brake Test, é possível garantir que o sistema de freios está funcionando corretamente e que as quatro rodas estão travando simultaneamente, algo essencial para a segurança e controle do veículo.
 
+<img src='../assets/tela_brake.png' alt="Tela Brake">
+</img>
+
 ---
 
 ## 3. Acceleration
@@ -40,6 +43,9 @@ O **Acceleration** mede a capacidade do carro de atingir a máxima velocidade em
 
 **Por que é importante?**  
 Durante o teste de aceleração, é essencial monitorar a entrega de potência e a tração para minimizar perdas e maximizar a performance. Uma tela dedicada ajuda a avaliar o desempenho do powertrain em detalhes, facilitando ajustes para maximizar a aceleração.
+
+<img src='../assets/tela_aceleration.png' alt="Tela Acceleretion">
+</img>
 
 ---
 
@@ -53,6 +59,9 @@ O **Skidpad** testa a aderência lateral e a estabilidade nas curvas. A tela par
 **Por que é importante?**  
 Com uma tela personalizada para o Skidpad, a equipe pode analisar em tempo real o comportamento do carro nas curvas, otimizando o equilíbrio entre aderência, estabilidade e controle da suspensão, essencial para evitar derrapagens e maximizar a eficiência nas curvas.
 
+<img src='../assets/tela_skidpad.png' alt="Tela Skidpad">
+</img>
+
 ---
 
 ## 5. Autocross
@@ -64,6 +73,9 @@ O **Autocross** é um teste técnico que exige respostas rápidas e precisão. A
 
 **Por que é importante?**  
 No Autocross, uma tela dedicada ajuda a monitorar o desempenho do carro em um ambiente técnico, com curvas fechadas e acelerações curtas. O feedback imediato sobre o tempo de volta e a manobrabilidade permite otimizar a resposta do carro e melhorar o tempo de prova.
+
+<img src='../assets/tela_autocross.png' alt="Tela Autocross">
+</img>
 
 ---
 
