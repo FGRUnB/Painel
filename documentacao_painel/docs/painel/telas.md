@@ -14,6 +14,9 @@ O **Endurance** é um dos testes mais longos e exaustivos, focado na durabilidad
 **Por que é importante?**  
 Uma tela personalizada para o Endurance permite que a equipe monitore de perto o consumo energético e a durabilidade do sistema, prevenindo falhas e otimizando o equilíbrio entre desempenho e eficiência, aspectos cruciais para completar a prova sem esgotar a bateria.
 
+<img src='./assets/tela_enduro.png' alt="Texto Alternativo">
+</img>
+
 ---
 
 ## 2. Brake Test
