@@ -11,7 +11,6 @@
 
 // Função para desenhar velocímetro circular
 void DrawCircularGauge(ImDrawList* drawList, ImVec2 center, float radius, float value, float maxValue, const char* label, const char* unit, ImU32 color) {
-    // Ângulos ajustados para estender o arco verde mais para baixo
     float startAngle = IM_PI * 0.75f;  // Começa um pouco mais abaixo (10:30 horas)
     float endAngle = IM_PI * 2.25f;   // Termina um pouco mais abaixo (4:30 horas)
 
@@ -37,17 +36,19 @@ void DrawCircularGauge(ImDrawList* drawList, ImVec2 center, float radius, float 
     drawList->AddText(ImVec2(center.x - unitSize.x / 2, center.y + textSize.y / 2 + 5), IM_COL32(200, 200, 200, 255), unit);
 }
 
-
 // Função para criar um card com informações
-void DrawInfoCard(const char* title, const char* value, const char* details, ImU32 color) {
+void DrawInfoCard(const char* title, const char* value, const char* details, ImU32 color, ImVec2 offset = ImVec2(0, 0)) {
+    ImVec2 currentPos = ImGui::GetCursorPos();
+    ImGui::SetCursorPos(ImVec2(currentPos.x + offset.x, currentPos.y + offset.y));
     ImGui::BeginChild(title, ImVec2(200, 120), true, ImGuiWindowFlags_NoScrollbar);
-    ImGui::Text("%s", title); // Corrigido
+    ImGui::Text("%s", title);
     ImGui::Separator();
     ImGui::Dummy(ImVec2(0, 10));
-    ImGui::TextColored(ImColor(color), "%s", value); // Corrigido
-    ImGui::Text("%s", details); // Corrigido
+    ImGui::TextColored(ImColor(color), "%s", value);
+    ImGui::Text("%s", details);
     ImGui::EndChild();
 }
+
 
 // Função principal
 int main() {
@@ -124,10 +125,13 @@ int main() {
 
         ImGui::NextColumn();
 
-        // Coluna 3: Low Voltage e System
-        DrawInfoCard("Low Voltage", "100%", "12.5v | 35ºC | 3A", IM_COL32(0, 255, 0, 255));
+        // Coluna 3: Low Voltage e System alinhados à direita
+        float columnWidth = ImGui::GetColumnWidth();
+        ImVec2 rightAlignOffset(columnWidth - 200, 0); // Ajuste para alinhar à direita (200 é a largura do card)
+
+        DrawInfoCard("Low Voltage", "100%", "12.5v | 35ºC | 3A", IM_COL32(0, 255, 0, 255), rightAlignOffset);
         ImGui::Spacing();
-        DrawInfoCard("System", "OK", "HV: Battery\nLV: OK\nSecondary systems: OK", IM_COL32(0, 255, 0, 255));
+        DrawInfoCard("System", "OK", "HV: Battery\nLV: OK\nSecondary systems: OK", IM_COL32(0, 255, 0, 255), rightAlignOffset);
 
         ImGui::Columns(1);
 
