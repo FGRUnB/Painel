@@ -1,0 +1,4 @@
+/home/bertolazi/Painel/painel_V1/build/CMakeFiles/imgui.dir
+/home/bertolazi/Painel/painel_V1/build/CMakeFiles/Painel.dir
+/home/bertolazi/Painel/painel_V1/build/CMakeFiles/edit_cache.dir
+/home/bertolazi/Painel/painel_V1/build/CMakeFiles/rebuild_cache.dir

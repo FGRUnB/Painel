@@ -1,0 +1,3 @@
+/home/bertolazi/Painel/painel_V1/painel_V1/build/CMakeFiles/CircularGauge.dir
+/home/bertolazi/Painel/painel_V1/painel_V1/build/CMakeFiles/edit_cache.dir
+/home/bertolazi/Painel/painel_V1/painel_V1/build/CMakeFiles/rebuild_cache.dir
