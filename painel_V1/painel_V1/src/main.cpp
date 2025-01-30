@@ -9,6 +9,14 @@
 #define IM_PI 3.14159265358979323846f
 #endif
 
+// Definir o estado atual da tela
+enum ScreenState {
+    AccelerationScreen,
+    BrakeScreen
+};
+
+ScreenState currentScreen = AccelerationScreen; // Tela inicial
+
 // Função para desenhar velocímetro circular
 void DrawCircularGauge(ImDrawList* drawList, ImVec2 center, float radius, float value, float maxValue, const char* label, const char* unit, ImU32 color) {
     float startAngle = IM_PI * 0.75f;  // Começa um pouco mais abaixo (10:30 horas)
@@ -49,6 +57,95 @@ void DrawInfoCard(const char* title, const char* value, const char* details, ImU
     ImGui::EndChild();
 }
 
+// Função para desenhar a tela principal (Acceleration)
+void DrawAccelerationScreen(float speed, float maxSpeed) {
+    // Divisão em colunas
+    ImGui::Columns(3, nullptr, false);
+
+    // Coluna 1: High Voltage e Motor
+    DrawInfoCard("High Voltage", "50%", "75.5v | 35ºC | 100A", IM_COL32(0, 255, 0, 255));
+    ImGui::Spacing();
+    DrawInfoCard("Motor", "9999 RPM", "35ºC | 75.5v", IM_COL32(0, 255, 0, 255));
+
+    ImGui::NextColumn();
+
+    // Coluna 2: Velocímetro
+    ImVec2 center = ImGui::GetCursorScreenPos();
+    center.x += 150;
+    center.y += 150;
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    DrawCircularGauge(drawList, center, 100.0f, speed, maxSpeed, "999", "km/h", IM_COL32(0, 255, 0, 255));
+    ImGui::Dummy(ImVec2(300, 300));
+
+    ImGui::NextColumn();
+
+    // Coluna 3: Low Voltage e System alinhados à direita
+    float columnWidth = ImGui::GetColumnWidth();
+    ImVec2 rightAlignOffset(columnWidth - 200, 0); // Ajuste para alinhar à direita (200 é a largura do card)
+
+    DrawInfoCard("Low Voltage", "100%", "12.5v | 35ºC | 3A", IM_COL32(0, 255, 0, 255), rightAlignOffset);
+    ImGui::Spacing();
+    DrawInfoCard("System", "OK", "HV: Battery\nLV: OK\nSecondary systems: OK", IM_COL32(0, 255, 0, 255), rightAlignOffset);
+
+    ImGui::Columns(1);
+
+    // Botões distribuídos simetricamente
+    ImGui::SetCursorPos(ImVec2(200, 600)); // Posição do primeiro botão
+    if (ImGui::Button("Brake", ImVec2(150, 50))) {
+        currentScreen = BrakeScreen; // Muda para a tela de Brake
+    }
+
+    ImGui::SetCursorPos(ImVec2(400, 600)); // Posição do segundo botão
+    ImGui::Button("Acceleration", ImVec2(150, 50));
+
+    ImGui::SetCursorPos(ImVec2(600, 600)); // Posição do terceiro botão
+    ImGui::Button("Autocross", ImVec2(150, 50));
+
+    ImGui::SetCursorPos(ImVec2(800, 600)); // Posição do quarto botão
+    ImGui::Button("Skidpad", ImVec2(150, 50));
+
+    ImGui::SetCursorPos(ImVec2(1000, 600)); // Posição do quinto botão
+    ImGui::Button("Enduro", ImVec2(150, 50));
+}
+
+// Função para desenhar a tela de Brake
+void DrawBrakeScreen() {
+    // Divisão em colunas
+    ImGui::Columns(3, nullptr, false);
+
+    // Coluna 1: Status do Brake
+    DrawInfoCard("Brake Status", "Engaged", "Pressure: 75%\nTemp: 45ºC", IM_COL32(255, 0, 0, 255));
+    ImGui::Spacing();
+    DrawInfoCard("Brake Temp", "45ºC", "Front: 45ºC\nRear: 40ºC", IM_COL32(255, 165, 0, 255));
+
+    ImGui::NextColumn();
+
+    // Coluna 2: Indicador de força de frenagem
+    ImVec2 center = ImGui::GetCursorScreenPos();
+    center.x += 150;
+    center.y += 150;
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    DrawCircularGauge(drawList, center, 100.0f, 75.0f, 100.0f, "75%", "Brake Force", IM_COL32(255, 0, 0, 255));
+    ImGui::Dummy(ImVec2(300, 300));
+
+    ImGui::NextColumn();
+
+    // Coluna 3: Informações do sistema de frenagem
+    float columnWidth = ImGui::GetColumnWidth();
+    ImVec2 rightAlignOffset(columnWidth - 200, 0); // Ajuste para alinhar à direita (200 é a largura do card)
+
+    DrawInfoCard("System Status", "OK", "Hydraulics: OK\nABS: Active", IM_COL32(0, 255, 0, 255), rightAlignOffset);
+    ImGui::Spacing();
+    DrawInfoCard("Brake Pad", "75%", "Front: 80%\nRear: 70%", IM_COL32(255, 165, 0, 255), rightAlignOffset);
+
+    ImGui::Columns(1);
+
+    // Botão para voltar à tela principal
+    ImGui::SetCursorPos(ImVec2(200, 600));
+    if (ImGui::Button("Return to Acceleration", ImVec2(200, 50))) {
+        currentScreen = AccelerationScreen; // Volta para a tela de Acceleration
+    }
+}
 
 // Função principal
 int main() {
@@ -87,9 +184,6 @@ int main() {
     // Variáveis para o painel
     float speed = 999.0f;          // Velocidade atual
     float maxSpeed = 999.0f;       // Velocidade máxima
-    float batteryHigh = 50.0f;     // Bateria de alta voltagem
-    float batteryLow = 100.0f;     // Bateria de baixa voltagem
-    float motorRPM = 9999.0f;      // Rotação do motor
 
     // Loop principal
     while (!glfwWindowShouldClose(window)) {
@@ -101,55 +195,15 @@ int main() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // Layout principal
+        // Renderiza a tela com base no estado atual
         ImGui::SetNextWindowSize(ImVec2(1280, 720), ImGuiCond_Always);
         ImGui::Begin("Painel", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar);
 
-        // Divisão em colunas
-        ImGui::Columns(3, nullptr, false);
-
-        // Coluna 1: High Voltage e Motor
-        DrawInfoCard("High Voltage", "50%", "75.5v | 35ºC | 100A", IM_COL32(0, 255, 0, 255));
-        ImGui::Spacing();
-        DrawInfoCard("Motor", "9999 RPM", "35ºC | 75.5v", IM_COL32(0, 255, 0, 255));
-
-        ImGui::NextColumn();
-
-        // Coluna 2: Velocímetro
-        ImVec2 center = ImGui::GetCursorScreenPos();
-        center.x += 150;
-        center.y += 150;
-        ImDrawList* drawList = ImGui::GetWindowDrawList();
-        DrawCircularGauge(drawList, center, 100.0f, speed, maxSpeed, "999", "km/h", IM_COL32(0, 255, 0, 255));
-        ImGui::Dummy(ImVec2(300, 300));
-
-        ImGui::NextColumn();
-
-        // Coluna 3: Low Voltage e System alinhados à direita
-        float columnWidth = ImGui::GetColumnWidth();
-        ImVec2 rightAlignOffset(columnWidth - 200, 0); // Ajuste para alinhar à direita (200 é a largura do card)
-
-        DrawInfoCard("Low Voltage", "100%", "12.5v | 35ºC | 3A", IM_COL32(0, 255, 0, 255), rightAlignOffset);
-        ImGui::Spacing();
-        DrawInfoCard("System", "OK", "HV: Battery\nLV: OK\nSecondary systems: OK", IM_COL32(0, 255, 0, 255), rightAlignOffset);
-
-        ImGui::Columns(1);
-
-        // Botões distribuídos simetricamente
-        ImGui::SetCursorPos(ImVec2(200, 600)); // Posição do primeiro botão
-        if (ImGui::Button("Brake", ImVec2(150, 50))) {}
-
-        ImGui::SetCursorPos(ImVec2(400, 600)); // Posição do segundo botão
-        if (ImGui::Button("Acceleration", ImVec2(150, 50))) {}
-
-        ImGui::SetCursorPos(ImVec2(600, 600)); // Posição do terceiro botão
-        if (ImGui::Button("Autocross", ImVec2(150, 50))) {}
-
-        ImGui::SetCursorPos(ImVec2(800, 600)); // Posição do quarto botão
-        if (ImGui::Button("Skidpad", ImVec2(150, 50))) {}
-
-        ImGui::SetCursorPos(ImVec2(1000, 600)); // Posição do quinto botão
-        if (ImGui::Button("Enduro", ImVec2(150, 50))) {}
+        if (currentScreen == AccelerationScreen) {
+            DrawAccelerationScreen(speed, maxSpeed);
+        } else if (currentScreen == BrakeScreen) {
+            DrawBrakeScreen();
+        }
 
         ImGui::End();
 
